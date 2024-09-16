@@ -1,50 +1,28 @@
-# React + TypeScript + Vite
+# Biome issue demo
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This repository demonstrates an issue with Biome (https://github.com/biomejs/biome) where it doesn't extend nested config.
 
-Currently, two official plugins are available:
+## The issue
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+When Biome is configured to extend a nested config file, it doesn't work as expected.
 
-## Expanding the ESLint configuration
+## Steps to reproduce
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+1. Clone this repository
+2. Run `npm install`
+3. Run `npm run format:lint`
 
-- Configure the top-level `parserOptions` property like this:
+## Expected behavior
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+Biome should be able to extend the nested config file and ignore tsconfig files.
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+## Actual behavior
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+Biome doesnt extend the nested config file and run default config.
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+## Configuration
+
+The configuration is as follows:
+
+- `biome.json` extends `biome-config/app.json`
+- `biome-config/app.json` extends `biome-config/base.json`
